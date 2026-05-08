@@ -43,7 +43,7 @@
     "fumadocs-docgen": "^3.0.10"
   },
   "peerDependencies": {
-    "manicjs": "^0.7.4",
-    "react": ">=18"
+    "manicjs": "^0.7.7",
+    "react": "^19.2.6"
   }
 }
