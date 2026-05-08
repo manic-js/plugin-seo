@@ -1,5 +1,5 @@
-import { createPlugin } from "manicjs/config";
-import { generateRobotsTxt } from "./robots";
+import { createPlugin } from 'manicjs/config';
+import { generateRobotsTxt } from './robots';
 
 /**
  * Robot rule for robots.txt
@@ -44,7 +44,7 @@ export interface SeoConfig {
   author?: string;
   /** Twitter card config */
   twitter?: {
-    card?: "summary" | "summary_large_image" | "app" | "player";
+    card?: 'summary' | 'summary_large_image' | 'app' | 'player';
     site?: string;
     creator?: string;
   };
@@ -68,33 +68,45 @@ export interface SeoConfig {
    * @see https://contentsignals.org/
    */
   contentSignals?: {
-    "ai-train"?: "yes" | "no";
-    search?: "yes" | "no";
-    "ai-input"?: "yes" | "no";
+    'ai-train'?: 'yes' | 'no';
+    search?: 'yes' | 'no';
+    'ai-input'?: 'yes' | 'no';
   };
 }
 
 function generateMetaTags(config: SeoConfig): string {
   const tags: string[] = [];
-  const hostname = config.hostname.replace(/\/$/, "");
+  const hostname = config.hostname.replace(/\/$/, '');
 
-  if (config.title) tags.push(`  <meta name="title" content="${config.title}">`);
-  if (config.description) tags.push(`  <meta name="description" content="${config.description}">`);
-  if (config.author) tags.push(`  <meta name="author" content="${config.author}">`);
+  if (config.title)
+    tags.push(`  <meta name="title" content="${config.title}">`);
+  if (config.description)
+    tags.push(`  <meta name="description" content="${config.description}">`);
+  if (config.author)
+    tags.push(`  <meta name="author" content="${config.author}">`);
 
   // Open Graph
-  if (config.title) tags.push(`  <meta property="og:title" content="${config.title}">`);
+  if (config.title)
+    tags.push(`  <meta property="og:title" content="${config.title}">`);
   if (config.description)
-    tags.push(`  <meta property="og:description" content="${config.description}">`);
+    tags.push(
+      `  <meta property="og:description" content="${config.description}">`
+    );
   tags.push(`  <meta property="og:url" content="${hostname}">`);
   if (config.openGraph?.type)
     tags.push(`  <meta property="og:type" content="${config.openGraph.type}">`);
   if (config.openGraph?.locale)
-    tags.push(`  <meta property="og:locale" content="${config.openGraph.locale}">`);
+    tags.push(
+      `  <meta property="og:locale" content="${config.openGraph.locale}">`
+    );
   if (config.openGraph?.image)
-    tags.push(`  <meta property="og:image" content="${config.openGraph.image}">`);
+    tags.push(
+      `  <meta property="og:image" content="${config.openGraph.image}">`
+    );
   if (config.openGraph?.siteName)
-    tags.push(`  <meta property="og:site_name" content="${config.openGraph.siteName}">`);
+    tags.push(
+      `  <meta property="og:site_name" content="${config.openGraph.siteName}">`
+    );
 
   // Twitter
   if (config.twitter?.card)
@@ -102,12 +114,17 @@ function generateMetaTags(config: SeoConfig): string {
   if (config.twitter?.site)
     tags.push(`  <meta name="twitter:site" content="${config.twitter.site}">`);
   if (config.twitter?.creator)
-    tags.push(`  <meta name="twitter:creator" content="${config.twitter.creator}">`);
-  if (config.title) tags.push(`  <meta name="twitter:title" content="${config.title}">`);
+    tags.push(
+      `  <meta name="twitter:creator" content="${config.twitter.creator}">`
+    );
+  if (config.title)
+    tags.push(`  <meta name="twitter:title" content="${config.title}">`);
   if (config.description)
-    tags.push(`  <meta name="twitter:description" content="${config.description}">`);
+    tags.push(
+      `  <meta name="twitter:description" content="${config.description}">`
+    );
 
-  return tags.join("\n");
+  return tags.join('\n');
 }
 
 /**
@@ -136,26 +153,30 @@ function generateMetaTags(config: SeoConfig): string {
  */
 export function seo(config: SeoConfig) {
   return createPlugin({
-    name: "seo",
+    name: 'seo',
 
     staticFiles: [
       {
-        path: "/robots.txt",
+        path: '/robots.txt',
         content: generateRobotsTxt(config),
-        contentType: "text/plain; charset=utf-8",
+        contentType: 'text/plain; charset=utf-8',
       },
     ],
 
     configureServer(ctx) {
-      const hostname = config.hostname.replace(/\/$/, "");
+      const hostname = config.hostname.replace(/\/$/, '');
       if (config.autoSitemap ?? true) {
-        ctx.addLinkHeader(`<${hostname}/sitemap.xml>; rel="describedby"; type="application/xml"`);
+        ctx.addLinkHeader(
+          `<${hostname}/sitemap.xml>; rel="describedby"; type="application/xml"`
+        );
       }
       for (const s of config.sitemaps ?? []) {
         ctx.addLinkHeader(`<${s}>; rel="describedby"; type="application/xml"`);
       }
       for (const lh of config.linkHeaders ?? []) {
-        ctx.addLinkHeader(`<${lh.href}>; rel="${lh.rel}"${lh.type ? `; type="${lh.type}"` : ""}`);
+        ctx.addLinkHeader(
+          `<${lh.href}>; rel="${lh.rel}"${lh.type ? `; type="${lh.type}"` : ''}`
+        );
       }
       const metaTags = generateMetaTags(config);
       if (metaTags) ctx.injectHtml(metaTags);
