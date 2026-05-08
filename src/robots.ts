@@ -1,12 +1,10 @@
-import type { SeoConfig } from './index';
+import type { SeoConfig } from "./index";
 
 /** Generates the full robots.txt content from the SEO config. */
 export function generateRobotsTxt(config: SeoConfig): string {
-  const hostname = config.hostname.replace(/\/$/, '');
+  const hostname = config.hostname.replace(/\/$/, "");
   const autoSitemap = config.autoSitemap ?? true;
-  const rules = config.rules?.length
-    ? config.rules
-    : [{ userAgent: '*', allow: ['/'] }];
+  const rules = config.rules?.length ? config.rules : [{ userAgent: "*", allow: ["/"] }];
   const lines: string[] = [];
 
   for (const rule of rules) {
@@ -14,7 +12,7 @@ export function generateRobotsTxt(config: SeoConfig): string {
     for (const p of rule.allow ?? []) lines.push(`Allow: ${p}`);
     for (const p of rule.disallow ?? []) lines.push(`Disallow: ${p}`);
     if (rule.crawlDelay != null) lines.push(`Crawl-delay: ${rule.crawlDelay}`);
-    lines.push('');
+    lines.push("");
   }
 
   const sitemaps = config.sitemaps ? [...config.sitemaps] : [];
@@ -25,11 +23,9 @@ export function generateRobotsTxt(config: SeoConfig): string {
   for (const s of sitemaps) lines.push(`Sitemap: ${s}`);
 
   if (config.contentSignals) {
-    const parts = Object.entries(config.contentSignals).map(
-      ([k, v]) => `${k}=${v}`
-    );
-    if (parts.length) lines.push('', `Content-Signal: ${parts.join(', ')}`);
+    const parts = Object.entries(config.contentSignals).map(([k, v]) => `${k}=${v}`);
+    if (parts.length) lines.push("", `Content-Signal: ${parts.join(", ")}`);
   }
 
-  return lines.join('\n').trim() + '\n';
+  return lines.join("\n").trim() + "\n";
 }

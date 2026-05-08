@@ -16,11 +16,11 @@ bun add @manicjs/seo
 ## Usage
 
 ```ts
-import { defineConfig } from 'manicjs/config';
-import { seo } from '@manicjs/seo';
+import { defineConfig } from "manicjs/config";
+import { seo } from "@manicjs/seo";
 
 export default defineConfig({
-  plugins: [seo({ hostname: 'https://example.com' })],
+  plugins: [seo({ hostname: "https://example.com" })],
 });
 ```
 

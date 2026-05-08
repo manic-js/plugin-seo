@@ -1,12 +1,16 @@
 {
   "name": "@manicjs/seo",
   "version": "1.0.1",
-  "description": "SEO plugin for Manic framework \u2014 robots.txt generation",
+  "description": "SEO plugin for Manic framework — robots.txt generation",
   "keywords": [
     "manic",
     "robots.txt",
     "seo"
   ],
+  "homepage": "https://github.com/manic-js/plugin-seo#readme",
+  "bugs": {
+    "url": "https://github.com/manic-js/plugin-seo/issues"
+  },
   "license": "GPL-3.0",
   "author": "Rahuletto",
   "repository": {
@@ -33,17 +37,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "peerDependencies": {
-    "manicjs": "^0.7.4",
-    "react": ">=18"
-  },
   "devDependencies": {
     "@shikijs/transformers": "^4.0.2",
     "@types/mdx": "^2.0.13",
     "fumadocs-docgen": "^3.0.10"
   },
-  "homepage": "https://github.com/manic-js/plugin-seo#readme",
-  "bugs": {
-    "url": "https://github.com/manic-js/plugin-seo/issues"
+  "peerDependencies": {
+    "manicjs": "^0.7.4",
+    "react": ">=18"
   }
 }

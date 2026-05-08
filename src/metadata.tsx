@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 /**
  * Per-page metadata that overrides global SEO defaults.
@@ -46,7 +46,7 @@ export interface MetadataProps {
   /** Open Graph site name — sets `og:site_name` */
   ogSiteName?: string;
   /** Twitter card type — sets `twitter:card` */
-  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
+  twitterCard?: "summary" | "summary_large_image" | "app" | "player";
   /** Twitter site handle — sets `twitter:site` */
   twitterSite?: string;
   /** Twitter creator handle — sets `twitter:creator` */
@@ -59,47 +59,38 @@ export interface MetadataProps {
 
 type TagEntry = { element: Element; previous: string | null };
 
-const MANIC_ATTR = 'data-manic-seo';
+const MANIC_ATTR = "data-manic-seo";
 
-function upsertMeta(
-  attr: 'name' | 'property',
-  key: string,
-  value: string,
-  tracker: TagEntry[]
-) {
+function upsertMeta(attr: "name" | "property", key: string, value: string, tracker: TagEntry[]) {
   const selector = `meta[${attr}="${key}"]`;
   let el = document.head.querySelector(selector);
-  const previous = el?.getAttribute('content') ?? null;
+  const previous = el?.getAttribute("content") ?? null;
 
   if (el) {
-    el.setAttribute('content', value);
+    el.setAttribute("content", value);
   } else {
-    el = document.createElement('meta');
+    el = document.createElement("meta");
     el.setAttribute(attr, key);
-    el.setAttribute('content', value);
-    el.setAttribute(MANIC_ATTR, '');
+    el.setAttribute("content", value);
+    el.setAttribute(MANIC_ATTR, "");
     document.head.appendChild(el);
   }
 
   tracker.push({ element: el, previous });
 }
 
-function upsertLink(
-  rel: string,
-  href: string,
-  tracker: TagEntry[]
-) {
+function upsertLink(rel: string, href: string, tracker: TagEntry[]) {
   const selector = `link[rel="${rel}"]`;
   let el = document.head.querySelector(selector);
-  const previous = el?.getAttribute('href') ?? null;
+  const previous = el?.getAttribute("href") ?? null;
 
   if (el) {
-    el.setAttribute('href', href);
+    el.setAttribute("href", href);
   } else {
-    el = document.createElement('link');
-    el.setAttribute('rel', rel);
-    el.setAttribute('href', href);
-    el.setAttribute(MANIC_ATTR, '');
+    el = document.createElement("link");
+    el.setAttribute("rel", rel);
+    el.setAttribute("href", href);
+    el.setAttribute(MANIC_ATTR, "");
     document.head.appendChild(el);
   }
 
@@ -129,39 +120,29 @@ export function Metadata(props: MetadataProps): null {
     }
 
     // Standard meta
-    if (props.title) upsertMeta('name', 'title', props.title, tags);
-    if (props.description)
-      upsertMeta('name', 'description', props.description, tags);
-    if (props.author) upsertMeta('name', 'author', props.author, tags);
+    if (props.title) upsertMeta("name", "title", props.title, tags);
+    if (props.description) upsertMeta("name", "description", props.description, tags);
+    if (props.author) upsertMeta("name", "author", props.author, tags);
 
     // Open Graph
-    if (props.title) upsertMeta('property', 'og:title', props.title, tags);
-    if (props.description)
-      upsertMeta('property', 'og:description', props.description, tags);
-    if (props.ogImage) upsertMeta('property', 'og:image', props.ogImage, tags);
-    if (props.ogType) upsertMeta('property', 'og:type', props.ogType, tags);
-    if (props.ogUrl) upsertMeta('property', 'og:url', props.ogUrl, tags);
-    if (props.ogLocale)
-      upsertMeta('property', 'og:locale', props.ogLocale, tags);
-    if (props.ogSiteName)
-      upsertMeta('property', 'og:site_name', props.ogSiteName, tags);
+    if (props.title) upsertMeta("property", "og:title", props.title, tags);
+    if (props.description) upsertMeta("property", "og:description", props.description, tags);
+    if (props.ogImage) upsertMeta("property", "og:image", props.ogImage, tags);
+    if (props.ogType) upsertMeta("property", "og:type", props.ogType, tags);
+    if (props.ogUrl) upsertMeta("property", "og:url", props.ogUrl, tags);
+    if (props.ogLocale) upsertMeta("property", "og:locale", props.ogLocale, tags);
+    if (props.ogSiteName) upsertMeta("property", "og:site_name", props.ogSiteName, tags);
 
     // Twitter Card
-    if (props.twitterCard)
-      upsertMeta('name', 'twitter:card', props.twitterCard, tags);
-    if (props.title)
-      upsertMeta('name', 'twitter:title', props.title, tags);
-    if (props.description)
-      upsertMeta('name', 'twitter:description', props.description, tags);
-    if (props.ogImage)
-      upsertMeta('name', 'twitter:image', props.ogImage, tags);
-    if (props.twitterSite)
-      upsertMeta('name', 'twitter:site', props.twitterSite, tags);
-    if (props.twitterCreator)
-      upsertMeta('name', 'twitter:creator', props.twitterCreator, tags);
+    if (props.twitterCard) upsertMeta("name", "twitter:card", props.twitterCard, tags);
+    if (props.title) upsertMeta("name", "twitter:title", props.title, tags);
+    if (props.description) upsertMeta("name", "twitter:description", props.description, tags);
+    if (props.ogImage) upsertMeta("name", "twitter:image", props.ogImage, tags);
+    if (props.twitterSite) upsertMeta("name", "twitter:site", props.twitterSite, tags);
+    if (props.twitterCreator) upsertMeta("name", "twitter:creator", props.twitterCreator, tags);
 
     // Canonical
-    if (props.canonical) upsertLink('canonical', props.canonical, tags);
+    if (props.canonical) upsertLink("canonical", props.canonical, tags);
 
     tracked.current = { title: prevTitle, tags };
 
@@ -179,7 +160,7 @@ export function Metadata(props: MetadataProps): null {
           }
         } else {
           // We modified an existing tag — restore original value
-          const attr = element.hasAttribute('content') ? 'content' : 'href';
+          const attr = element.hasAttribute("content") ? "content" : "href";
           element.setAttribute(attr, previous);
         }
       }
