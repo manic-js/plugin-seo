@@ -1,6 +1,6 @@
 {
   "name": "@manicjs/seo",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "SEO plugin for Manic framework — robots.txt generation",
   "keywords": [
     "manic",
@@ -41,7 +41,7 @@
   "scripts": {
     "ci:lint": "bunx --bun oxlint --config .oxlintrc.json .",
     "ci:format": "bunx --bun oxfmt --check --config .oxfmt.json .",
-    "ci:typecheck": "if [ -f tsconfig.json ]; then bunx --bun tsc --noEmit; elif [ -f src/index.ts ]; then bunx --bun tsc --noEmit --module esnext --moduleResolution bundler --target es2022 src/index.ts; elif [ -f index.ts ]; then bunx --bun tsc --noEmit --module esnext --moduleResolution bundler --target es2022 index.ts; else echo \"No TypeScript entrypoint found\"; exit 1; fi",
+    "ci:typecheck": "bunx --bun tsc --noEmit -p tsconfig.typecheck.json",
     "ci:build": "if bun run | grep -q \"^ build$\"; then bun run build; elif [ -f src/index.ts ]; then bun build src/index.ts --target bun --outdir .ci-build; elif [ -f index.ts ]; then bun build index.ts --target bun --outdir .ci-build; else echo \"No build entrypoint found\"; exit 1; fi",
     "ci:test": "bun run test",
     "ci:compliance": "test -f CODE_OF_CONDUCT.md && test -f LICENSE && test -f README.md",
@@ -49,8 +49,12 @@
   },
   "devDependencies": {
     "@shikijs/transformers": "^4.0.2",
+    "@types/bun": "^1.3.13",
     "@types/mdx": "^2.0.13",
-    "fumadocs-docgen": "^3.0.10"
+    "@types/react": "^18.3.12",
+    "fumadocs-docgen": "^3.0.10",
+    "manicjs": "^1.0.0",
+    "react": "^18.3.1"
   },
   "peerDependencies": {
     "manicjs": ">=1.0.0",

@@ -1,5 +1,7 @@
 import { createPlugin } from 'manicjs/config';
-import { generateRobotsTxt } from './robots';
+import { generateRobotsTxt, resolveSeoHostname } from './robots';
+
+export { resolveSeoHostname } from './robots';
 
 /**
  * Robot rule for robots.txt
@@ -34,8 +36,12 @@ export interface LinkHeader {
  * @interface SeoConfig
  */
 export interface SeoConfig {
-  /** Base URL of the site, e.g. "https://example.com" */
-  hostname: string;
+  /**
+   * Base URL of the site, e.g. "https://example.com".
+   * Optional for local dev: defaults to `process.env.MANIC_SITE_URL` or `http://localhost:3000`.
+   * Set explicitly (or via env) before production deploy.
+   */
+  hostname?: string;
   /** Page title */
   title?: string;
   /** Page description */
@@ -76,7 +82,7 @@ export interface SeoConfig {
 
 function generateMetaTags(config: SeoConfig): string {
   const tags: string[] = [];
-  const hostname = config.hostname.replace(/\/$/, '');
+  const hostname = resolveSeoHostname(config);
 
   if (config.title)
     tags.push(`  <meta name="title" content="${config.title}">`);
@@ -151,7 +157,7 @@ function generateMetaTags(config: SeoConfig): string {
  *   twitter: { card: 'summary_large_image' },
  * })
  */
-export function seo(config: SeoConfig) {
+export function seo(config: SeoConfig = {}) {
   return createPlugin({
     name: 'seo',
 
@@ -164,7 +170,7 @@ export function seo(config: SeoConfig) {
     ],
 
     configureServer(ctx) {
-      const hostname = config.hostname.replace(/\/$/, '');
+      const hostname = resolveSeoHostname(config);
       if (config.autoSitemap ?? true) {
         ctx.addLinkHeader(
           `<${hostname}/sitemap.xml>; rel="describedby"; type="application/xml"`

@@ -78,7 +78,7 @@ function upsertMeta(
     el.setAttribute(attr, key);
     el.setAttribute('content', value);
     el.setAttribute(MANIC_ATTR, '');
-    document.head.appendChild(el);
+    document.head.append(el);
   }
 
   tracker.push({ element: el, previous });
@@ -96,7 +96,7 @@ function upsertLink(rel: string, href: string, tracker: TagEntry[]) {
     el.setAttribute('rel', rel);
     el.setAttribute('href', href);
     el.setAttribute(MANIC_ATTR, '');
-    document.head.appendChild(el);
+    document.head.append(el);
   }
 
   tracker.push({ element: el, previous });

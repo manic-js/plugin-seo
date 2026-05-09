@@ -1,8 +1,16 @@
 import type { SeoConfig } from './index';
 
+/** Canonical site origin for robots.txt, meta tags, and Link headers. */
+export function resolveSeoHostname(config: SeoConfig): string {
+  const envUrl =
+    typeof process === 'undefined' ? undefined : process.env.MANIC_SITE_URL;
+  const raw = config.hostname ?? envUrl ?? 'http://localhost:3000';
+  return String(raw).replace(/\/$/, '');
+}
+
 /** Generates the full robots.txt content from the SEO config. */
 export function generateRobotsTxt(config: SeoConfig): string {
-  const hostname = config.hostname.replace(/\/$/, '');
+  const hostname = resolveSeoHostname(config);
   const autoSitemap = config.autoSitemap ?? true;
   const rules = config.rules?.length
     ? config.rules
@@ -13,7 +21,9 @@ export function generateRobotsTxt(config: SeoConfig): string {
     lines.push(`User-agent: ${rule.userAgent}`);
     for (const p of rule.allow ?? []) lines.push(`Allow: ${p}`);
     for (const p of rule.disallow ?? []) lines.push(`Disallow: ${p}`);
-    if (rule.crawlDelay != null) lines.push(`Crawl-delay: ${rule.crawlDelay}`);
+    if (rule.crawlDelay !== undefined && rule.crawlDelay !== null) {
+      lines.push(`Crawl-delay: ${rule.crawlDelay}`);
+    }
     lines.push('');
   }
 
@@ -28,7 +38,7 @@ export function generateRobotsTxt(config: SeoConfig): string {
     const parts = Object.entries(config.contentSignals).map(
       ([k, v]) => `${k}=${v}`
     );
-    if (parts.length) lines.push('', `Content-Signal: ${parts.join(', ')}`);
+    if (parts.length > 0) lines.push('', `Content-Signal: ${parts.join(', ')}`);
   }
 
   return lines.join('\n').trim() + '\n';
