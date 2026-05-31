@@ -1,6 +1,6 @@
 {
   "name": "@manicjs/seo",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "SEO plugin for Manic framework — robots.txt generation",
   "keywords": [
     "manic",
