@@ -158,7 +158,7 @@ function generateMetaTags(config: SeoConfig): string {
  * })
  */
 export function seo(config: SeoConfig = {}) {
-  return createPlugin({
+  const plugin = createPlugin({
     name: 'seo',
 
     staticFiles: [
@@ -193,4 +193,7 @@ export function seo(config: SeoConfig = {}) {
       if (metaTags) ctx.injectHtml(metaTags);
     },
   });
+
+  (plugin as any).config = config;
+  return plugin;
 }
